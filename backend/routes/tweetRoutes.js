@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const tweetController = require('../controllers/tweetController');
-// FIX: Use lowercase filename for require path
 const authMiddleware = require('../middleware/authMiddleware');
 const { replyToTweet, getReplies, editTweet, deleteTweet, getTimeline } = require("../controllers/tweetController");
 

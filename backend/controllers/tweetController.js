@@ -1,5 +1,5 @@
 const Tweet = require("../models/Tweet");
-const Notification = require("../models/notificationModel");
+const Notification = require("../models/NotificationModel");
 const User = require("../models/User");
 
 exports.createTweet = async (req, res) => {

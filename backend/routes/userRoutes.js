@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-// FIX: Use lowercase filename for require path
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.post("/:username/follow", authMiddleware, userController.followUser);
