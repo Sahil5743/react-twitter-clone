@@ -1,24 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const tweetController = require('../controllers/TweetController');
-const authMiddleware = require('../middleware/AuthMiddleware');
-const { replyToTweet, getReplies, editTweet, deleteTweet, getTimeline } = require("../controllers/TweetController");
+const tweetController = require('../controllers/tweetController');
+const authMiddleware = require('../middleware/authMiddleware');
+const { replyToTweet, getReplies, editTweet, deleteTweet, getTimeline } = require("../controllers/tweetController");
 
 // Edit tweet
-router.put("/:id", AuthMiddleware, editTweet);
+router.put("/:id", authMiddleware, editTweet);
 // Delete tweet
-router.delete("/:id", AuthMiddleware, deleteTweet);
+router.delete("/:id", authMiddleware, deleteTweet);
 // Reply to tweet
-router.post("/:id/reply", AuthMiddleware, replyToTweet);
+router.post("/:id/reply", authMiddleware, replyToTweet);
 // Get replies
 router.get("/:id/replies", getReplies);
 // Timeline
-router.get("/timeline", AuthMiddleware, getTimeline);
+router.get("/timeline", authMiddleware, getTimeline);
 // Create tweet
-router.post('/', AuthMiddleware, TweetController.createTweet);
+router.post('/', authMiddleware, tweetController.createTweet);
 // Get all tweets
-router.get('/', TweetController.getAllTweets);
+router.get('/', tweetController.getAllTweets);
 // Like/unlike tweet
-router.post('/:id/like', AuthMiddleware, TweetController.toggleLike);
+router.post('/:id/like', authMiddleware, tweetController.toggleLike);
 
 module.exports = router;

@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/UserController');
-const authMiddleware = require("../middleware/AuthMiddleware");
+const userController = require('../controllers/userController');
+const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/:username/follow", AuthMiddleware, UserController.followUser);
-router.post("/:username/unfollow", AuthMiddleware, UserController.unfollowUser);
-router.get('/:username', UserController.getUserProfile);
+router.post("/:username/follow", authMiddleware, userController.followUser);
+router.post("/:username/unfollow", authMiddleware, userController.unfollowUser);
+router.get('/:username', userController.getUserProfile);
 
 module.exports = router;
