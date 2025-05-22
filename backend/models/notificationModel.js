@@ -4,26 +4,26 @@ const notificationSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true, // The user receiving the notification
+    required: true,
   },
   sender: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true, // The user who performed the action (like/reply)
+    required: true,
   },
   type: {
     type: String,
     enum: ["reply", "like", "follow"],
-    required: true, // Can be extended to include other actions
+    required: true,
   },
   tweet: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tweet",
-    default: null, // Optional: Only required for like/reply
+    default: null,
   },
   isRead: {
     type: Boolean,
-    default: false, // Unread by default
+    default: false,
   },
   createdAt: {
     type: Date,
@@ -31,4 +31,7 @@ const notificationSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Notification", notificationSchema);
+// Prevent OverwriteModelError in dev/hot-reload
+module.exports = mongoose.models.Notification
+  ? mongoose.model("Notification")
+  : mongoose.model("Notification", notificationSchema);

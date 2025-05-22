@@ -1,5 +1,5 @@
-const User = require("../models/user");
-const Tweet = require("../models/tweet");
+const User = require("../models/User");
+const Tweet = require("../models/Tweet");
 
 exports.getUserProfile = async (req, res) => {
   try {
