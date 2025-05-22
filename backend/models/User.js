@@ -10,4 +10,6 @@ const userSchema = new mongoose.Schema({
   following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 }, { timestamps: true });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = require('mongoose').models.User
+  ? require('mongoose').model('User')
+  : require('mongoose').model('User', userSchema);

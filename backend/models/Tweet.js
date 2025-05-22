@@ -28,4 +28,6 @@ const tweetSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('Tweet', tweetSchema);
+module.exports = require('mongoose').models.Tweet
+  ? require('mongoose').model('Tweet')
+  : require('mongoose').model('Tweet', tweetSchema);

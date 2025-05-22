@@ -33,6 +33,6 @@ const notificationSchema = new mongoose.Schema({
 
 // Prevent OverwriteModelError in dev/hot-reload
 module.exports =
-  mongoose.models.Notification
-    ? mongoose.model("Notification")
-    : mongoose.model("Notification", notificationSchema);
+  require('mongoose').models.Notification
+    ? require('mongoose').model("Notification")
+    : require('mongoose').model("Notification", notificationSchema);
