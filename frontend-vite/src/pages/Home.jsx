@@ -12,11 +12,7 @@ export default function Home() {
       setLoading(true);
       setError(null);
       try {
-        // Use full URL if VITE_API_URL is set, else fallback to relative
-        const apiUrl = import.meta.env.VITE_API_URL
-          ? `${import.meta.env.VITE_API_URL}/api/tweets`
-          : "/api/tweets";
-        const res = await axios.get(apiUrl);
+        const res = await axios.get("/api/tweets");
         setTweets(res.data);
       } catch (err) {
         setError("Failed to load tweets. Please try again later.");
