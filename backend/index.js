@@ -32,3 +32,8 @@ if (require.main === module) {
     .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
     .catch(err => console.error(err));
 }
+
+// ---
+// To reduce sleep on Vercel, use a free uptime monitor (like UptimeRobot) to ping
+// https://<your-vercel-domain>/api/health every 5-10 minutes.
+// This keeps the serverless function "warm" and responsive.
