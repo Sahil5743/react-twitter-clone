@@ -12,6 +12,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Vercel/Serverless: Add a health check endpoint to keep the server "warm"
+app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok' }));
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tweets', tweetRoutes);
@@ -20,6 +23,12 @@ app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
-  .catch(err => console.error(err));
+// For Vercel: Export the app for serverless
+module.exports = app;
+
+// For local/dev: Start server if not in serverless
+if (require.main === module) {
+  mongoose.connect(process.env.MONGO_URI)
+    .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
+    .catch(err => console.error(err));
+}
