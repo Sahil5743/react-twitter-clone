@@ -20,7 +20,7 @@ const CreateTweet = ({ onTweetCreated }) => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:5000/api/tweets",
+        "/api/tweets",
         { content },
         { headers: { Authorization: `Bearer ${token}` } }
       );

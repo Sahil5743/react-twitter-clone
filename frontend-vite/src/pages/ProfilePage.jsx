@@ -14,7 +14,7 @@ const ProfilePage = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(`http://localhost:5000/api/users/${username}`);
+        const res = await axios.get(`/api/users/${username}`);
         setProfile(res.data);
       } catch (err) {
         setError("Failed to load profile. Please try again later.");

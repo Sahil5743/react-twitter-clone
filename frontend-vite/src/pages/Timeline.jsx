@@ -13,7 +13,7 @@ const Timeline = () => {
       setError("");
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/tweets/timeline", {
+        const res = await axios.get("/api/tweets/timeline", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

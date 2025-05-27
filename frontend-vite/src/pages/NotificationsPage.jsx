@@ -11,7 +11,7 @@ const NotificationsPage = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await axios.get("http://localhost:5000/api/notifications", {
+        const res = await axios.get("/api/notifications", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },

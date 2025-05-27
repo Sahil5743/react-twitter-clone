@@ -33,7 +33,7 @@ const TweetCard = ({ tweet, onDelete }) => {
     if (!window.confirm("Are you sure you want to delete this tweet?")) return;
     setLoadingDelete(true);
     try {
-      await axios.delete(`http://localhost:5000/api/tweets/${tweet._id}`, {
+      await axios.delete(`/api/tweets/${tweet._id}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (onDelete) onDelete(tweet._id);
@@ -49,7 +49,7 @@ const TweetCard = ({ tweet, onDelete }) => {
     setLoadingEdit(true);
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tweets/${tweet._id}`,
+        `/api/tweets/${tweet._id}`,
         { content: editContent.trim() },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -68,7 +68,7 @@ const TweetCard = ({ tweet, onDelete }) => {
     setLoadingLike(true);
     try {
       await axios.post(
-        `http://localhost:5000/api/tweets/${tweet._id}/like`,
+        `/api/tweets/${tweet._id}/like`,
         {},
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -87,7 +87,7 @@ const TweetCard = ({ tweet, onDelete }) => {
     setLoadingLike(true);
     try {
       await axios.post(
-        `http://localhost:5000/api/tweets/${tweet._id}/like`,
+        `/api/tweets/${tweet._id}/like`,
         {},
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -107,7 +107,7 @@ const TweetCard = ({ tweet, onDelete }) => {
     setLoadingFollow(true);
     try {
       const action = isFollowing ? "unfollow" : "follow";
-      const url = `http://localhost:5000/api/users/${tweet.author.username}/${action}`;
+      const url = `/api/users/${tweet.author.username}/${action}`;
       await axios.post(url, {}, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });

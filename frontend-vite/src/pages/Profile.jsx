@@ -30,7 +30,7 @@ const Profile = () => {
       setError(null);
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/users/${isOwnProfile ? user.username : username}`
+          `/api/users/${isOwnProfile ? user.username : username}`
         );
         if (!res.data || !res.data.user) {
           setError("User not found.");
@@ -84,7 +84,7 @@ const Profile = () => {
     try {
       const action = isFollowing ? "unfollow" : "follow";
       await axios.post(
-        `http://localhost:5000/api/users/${username}/${action}`,
+        `/api/users/${username}/${action}`,
         {},
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -115,7 +115,7 @@ const Profile = () => {
   const handleSaveBio = async () => {
     try {
       const res = await axios.put(
-        "http://localhost:5000/api/users/profile",
+        "/api/users/profile",
         { bio },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

@@ -7,7 +7,7 @@ const ReplyBox = ({ tweetId, onReply }) => {
   const handleSubmit = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/tweets/${tweetId}/reply`,
+        `/api/tweets/${tweetId}/reply`,
         { content },
         {
           headers: {

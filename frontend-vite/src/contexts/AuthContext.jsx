@@ -2,6 +2,10 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
+// Set baseURL for axios to use Vercel backend in production
+axios.defaults.baseURL =
+  import.meta.env.VITE_API_URL || "https://minitweeter.vercel.app";
+
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
@@ -45,7 +49,7 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const res = await axios.post("/api/auth/login", { email, password });
       setUser(res.data.user);
       setToken(res.data.token);
     } catch (err) {
@@ -60,7 +64,7 @@ export function AuthProvider({ children }) {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", { username, email, password });
+      const res = await axios.post("/api/auth/signup", { username, email, password });
       setUser(res.data.user);
       setToken(res.data.token);
     } catch (err) {
@@ -81,7 +85,7 @@ export function AuthProvider({ children }) {
   const fetchMe = useCallback(async () => {
     if (!token) return null;
     try {
-      const res = await axios.get("http://localhost:5000/api/users/me");
+      const res = await axios.get("/api/users/me");
       setUser(res.data.user);
       return res.data.user;
     } catch (err) {

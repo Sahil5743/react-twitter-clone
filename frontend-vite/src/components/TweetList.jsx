@@ -12,7 +12,7 @@ const TweetList = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await axios.get("http://localhost:5000/api/tweets");
+      const res = await axios.get("/api/tweets");
       setTweets(res.data);
     } catch (err) {
       console.error(err);
@@ -27,7 +27,7 @@ const TweetList = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:5000/api/tweets/${tweetId}/like`,
+        `/api/tweets/${tweetId}/like`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -59,7 +59,7 @@ const TweetList = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        `http://localhost:5000/api/tweets/${tweetId}/like`,
+        `/api/tweets/${tweetId}/like`,
         {},
         {
           headers: { Authorization: `Bearer ${token}` },
