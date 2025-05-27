@@ -2,8 +2,9 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-// Set baseURL for axios to use Vercel backend in production
-axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+// Set axios baseURL from .env file, fallback to localhost for development
+axios.defaults.baseURL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 export const AuthContext = createContext();
 
