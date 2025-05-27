@@ -23,29 +23,39 @@ app.use("/api/users", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-// For Vercel: Export the app for serverless
-module.exports = app;
-
-// For Vercel: Connect to MongoDB on every invocation if not already connected
-if (process.env.VERCEL) {
-  let isConnected = false;
-  app.use(async (req, res, next) => {
-    if (!isConnected) {
-      try {
-        await mongoose.connect(process.env.MONGO_URI);
-        isConnected = true;
-      } catch (err) {
-        console.error("MongoDB connection error:", err);
-        return res.status(500).json({ error: "MongoDB connection failed" });
-      }
+// For Vercel: Connect to MongoDB before handling any requests (top-level, not inside middleware)
+let isConnected = false;
+async function connectToDatabase() {
+  if (!isConnected) {
+    try {
+      await mongoose.connect(process.env.MONGO_URI);
+      isConnected = true;
+      console.log("MongoDB connected (Vercel serverless)");
+    } catch (err) {
+      console.error("MongoDB connection error:", err);
+      throw err;
     }
-    next();
-  });
-} else if (require.main === module) {
+  }
+}
+
+// For Vercel: Export the app for serverless
+if (process.env.VERCEL) {
+  module.exports = async (req, res) => {
+    try {
+      await connectToDatabase();
+      app(req, res);
+    } catch (err) {
+      res.status(500).json({ error: "MongoDB connection failed" });
+    }
+  };
+} else {
+  module.exports = app;
   // For local/dev: Start server if not in serverless
-  mongoose.connect(process.env.MONGO_URI)
-    .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
-    .catch(err => console.error(err));
+  if (require.main === module) {
+    mongoose.connect(process.env.MONGO_URI)
+      .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
+      .catch(err => console.error(err));
+  }
 }
 
 // ---
