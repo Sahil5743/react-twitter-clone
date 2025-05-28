@@ -1,8 +1,11 @@
+// index.js
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config(); // <-- FIX: Remove accidental npm command
 
+const connectDB = require('./config/db'); // ✅ Correct path for connectDB.js
+
+// Route imports
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require('./routes/authRoutes');
 const tweetRoutes = require('./routes/tweetRoutes');
@@ -12,53 +15,49 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Vercel/Serverless: Add a health check endpoint to keep the server "warm"
+// Health check route
 app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
-// API Routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tweets', tweetRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/users", userRoutes);
 
+// Port for local dev
 const PORT = process.env.PORT || 5000;
 
-// For Vercel: Connect to MongoDB before handling any requests (top-level, not inside middleware)
-let isConnected = false;
-async function connectToDatabase() {
-  if (!isConnected) {
-    try {
-      await mongoose.connect(process.env.MONGO_URI);
-      isConnected = true;
-      console.log("MongoDB connected (Vercel serverless)");
-    } catch (err) {
-      console.error("MongoDB connection error:", err);
-      throw err;
-    }
-  }
-}
-
-// For Vercel: Export the app for serverless
 if (process.env.VERCEL) {
+  // ✅ Vercel serverless export
+  // Only require serverless-http if actually running on Vercel
+  let handler;
+  try {
+    handler = require('serverless-http')(app);
+  } catch (e) {
+    console.error("serverless-http module not found. Please install it with: npm install serverless-http");
+    process.exit(1);
+  }
+
   module.exports = async (req, res) => {
     try {
-      await connectToDatabase();
-      app(req, res);
+      await connectDB();
+      return handler(req, res);
     } catch (err) {
-      res.status(500).json({ error: "MongoDB connection failed" });
+      console.error("Serverless handler error:", err);
+      res.status(500).json({ error: "Database connection failed" });
     }
   };
 } else {
-  module.exports = app;
-  // For local/dev: Start server if not in serverless
-  if (require.main === module) {
-    mongoose.connect(process.env.MONGO_URI)
-      .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
-      .catch(err => console.error(err));
-  }
-}
+  // ✅ Local development
+  connectDB()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    })
+    .catch(err => {
+      console.error("Local server error:", err);
+    });
 
-// ---
-// To reduce sleep on Vercel, use a free uptime monitor (like UptimeRobot) to ping
-// https://<your-vercel-domain>/api/health every 5-10 minutes.
-// This keeps the serverless function "warm" and responsive.
+  module.exports = app;
+}
