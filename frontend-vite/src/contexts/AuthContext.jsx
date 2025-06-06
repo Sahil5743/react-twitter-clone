@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 // Set axios baseURL from .env file (VITE_API_URL)
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 export const AuthContext = createContext();
 
@@ -78,7 +78,6 @@ export function AuthProvider({ children }) {
     setUser(null);
     setToken(null);
     setError(null);
-    // Optionally, you can also clear axios headers here, but it's done in useEffect on token change
   };
 
   const fetchMe = useCallback(async () => {

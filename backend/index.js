@@ -9,7 +9,7 @@ const tweetRoutes = require("./routes/tweetRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
-// Use only frontend URL from .env for CORS, do not fallback to localhost
+// Use only frontend URL from .env for CORS
 app.use(cors({
   origin: process.env.Frontend_Url?.replace(/"/g, ""),
   credentials: true
