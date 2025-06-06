@@ -9,9 +9,9 @@ const tweetRoutes = require("./routes/tweetRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
-// Use only frontend URL from .env for CORS
+// For local development, allow CORS from React dev server (port 3000)
 app.use(cors({
-  origin: process.env.Frontend_Url?.replace(/"/g, ""),
+  origin: "http://localhost:3000",
   credentials: true
 }));
 app.use(express.json());
