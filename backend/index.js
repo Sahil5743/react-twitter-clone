@@ -9,7 +9,11 @@ const tweetRoutes = require("./routes/tweetRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
 
 const app = express();
-app.use(cors());
+// Use only frontend URL from .env for CORS, do not fallback to localhost
+app.use(cors({
+  origin: process.env.Frontend_Url?.replace(/"/g, ""),
+  credentials: true
+}));
 app.use(express.json());
 
 app.get("/api/health", (req, res) => res.status(200).json({ status: "ok" }));
