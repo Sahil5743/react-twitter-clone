@@ -8,7 +8,7 @@ exports.signup = async (req, res) => {
 
   try {
     // Check if user exists
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email: { $regex: new RegExp(`^${email}$`, "i") } });
     if (user)
       return res.status(400).json({ message: "Email already registered" });
 
@@ -38,13 +38,13 @@ exports.login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Find user
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid credentials" });
+    // Find user by email (case-insensitive)
+    const user = await User.findOne({ email: { $regex: new RegExp(`^${email}$`, "i") } });
+    if (!user) return res.status(400).json({ message: "Invalid email or password. Please try again." });
 
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+    if (!isMatch) return res.status(400).json({ message: "Invalid email or password. Please try again." });
 
     // Create JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
