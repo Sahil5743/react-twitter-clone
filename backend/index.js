@@ -18,13 +18,16 @@ app.use("/api/tweets", tweetRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/users", userRoutes);
 
+// Add a root route for browser GET /
+app.get("/", (req, res) => {
+  res.send("API is running. Use /api/ endpoints.");
+});
+
 const PORT = process.env.PORT || 5000;
 
+// Remove deprecated options: useNewUrlParser, useUnifiedTopology
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI)
   .then(() => app.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
   .catch((err) => console.error("Local MongoDB error:", err));
 
